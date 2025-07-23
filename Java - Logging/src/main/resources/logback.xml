@@ -1,0 +1,36 @@
+<configuration>
+
+    <!-- <appender> defines the output destination. Here, ConsoleAppender writes logs to the standard console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- <pattern> defines the format of the log messages including the timestamp, log level, logger name and the message -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- <appender> for writing logs to a file. This appender uses a rolling policy to archive logs daily -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- <file> specifies the file where logs will be written. The logs will be stored in the logs directory with the name my-app.log -->
+        <file>logs/my-app.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- <rollingPolicy> defines how logs are archived. Here, we use a TimeBasedRollingPolicy to create a new log file every day -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- <fileNamePattern>: Sets the naming pattern for archived log files. Here, my-app.%d{yyyy-MM-dd}.log will create a new file every day (e.g., my-app.2025-07-23.log).-->
+            <fileNamePattern>logs/archived/my-app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- <maxHistory> defines how many days of logs to keep. Here, we keep logs for 30 days before they are deleted -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- <logger> defines the logging level for a specific package or class. Here, we set the logging level for com.msr.LoggingService to DEBUG -->
+    <logger name="com.msr.LoggingService" level="DEBUG"/>
+
+    <!-- <root level="...">: Sets the default log level for the entire application. Any logger without a specific level set will inherit this one. In this example, the default is INFO. -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

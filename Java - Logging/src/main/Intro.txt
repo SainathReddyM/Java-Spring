@@ -1,0 +1,54 @@
+1. Logging in Java:
+    In java, logging is the process of recording application events, errors, and diagnostic information. While java has a built-in framework(java.util.logging),
+    the industry standard is to use a logging facade with a separate logging implementation. This is because java.util.logging(JUL) is less powerful, less
+    flexible and has more cumbersome API than other logging frameworks. Key drawbacks of JUL include:
+        1. No Parameterized logging: JUL does not support parameterized logging, which can lead to performance issues and less readable code.
+        2. Limited configuration options: JUL has limited configuration options, making it difficult to customize logging behavior.
+        3. Poor performance: JUL is not optimized for high-performance applications, leading to slower logging and increased overhead.
+        4. Lack of advanced features: JUL lacks advanced features like asynchronous logging, structured logging, and support for multiple output formats.
+        5. No Separation of API and Implementation: JUL tightly couples the API with the implementation, making it difficult to switch to a different logging
+                                                    framework without significant code changes.
+The Rise of SLF4J and Modern Frameworks: The industry solved this problem by embracing a two-part system:
+    1. A Logging Facade(The API): SLF4J(Simple Logging Facade for Java) became the standard. It provides a simple, universal logging API. Developers write their code
+                                  against SLF4J, not a specific framework.
+    2. A Logging Implementation(The Engine): You then choose a powerful logging framework like Logback, Log4j2, or Log4j to act as the engine behind SLF4J at runtime.
+    This approach gives you the best of both worlds: your code is decoupled and portable, and you get the advanced features, performance, and flexible configuration of
+    a modern logging engine. This separation of concerns is why the SLF4J + Logback/Log4j2 combination became the undisputed industry standard.
+
+How it's Done (With SLF4J and Logback):
+    1. Add Dependencies: You add SLF4J and a logging implementation like Logback to your project dependencies.
+    2. Write Code Against SLF4J: You use SLF4J's API in your code, which is simple and intuitive.
+
+Note:
+    1. Always code against SLF4J facade, not a specific implementation.
+    2. Use parameterized logging to avoid performance issues. Avoid string concatenation in logging statements.
+    3. Log exceptions correctly: Always pass the exception object as the last argument to the logging method. This ensures the stack trace is captured correctly.
+    4. Do not log sensitive information: Avoid logging sensitive data like passwords, credit card numbers, or personal information to protect user privacy and security.
+    5. Use Structured logging: Configure your logger to output logs in a machine-readable format like JSON or XML. This is a game-changer for log analysis and monitoring.
+    6. Be Contextual: Log messages should be clear and provide enough context (like user IDs, transaction IDs) to be useful without needing to debug the code.
+
+Use correct Log levels:
+    1. ERROR: critical failures, something is broken, and action is required. (e.g., database connection lost)
+    2. WARN: Potential problems or unexpected situations that aren't critical failures. (e.g., deprecated API usage, fallback to default value).
+    3. INFO: High-level application lifecycle events. (e.g., "Application started", "User logged in").
+    4. DEBUG: Fine-grained information for debugging issues (e.g., "Data processing successful for ID: 123").
+    5. TRACE: The most detailed level for tracing code paths (e.g., "Entering method X").
+
+What is the need to create a logger specific to a class?
+    1. Granular Log Level Control: By creating a logger specific to each class, you can set different log levels for different parts of your application. The
+                                   logging framework uses the logger's name (which is usually the class name by default) to apply configuration rules.
+                                   For example, in your logging configuration, you could keep the default log level at INFO but enable detailed DEBUG logs for just one
+                                   problematic service/class.
+    2. Identifying the Log Source: When a log message is printed, the logger's name is typically included in the output. This immediately tells you which class
+                                   generated the log message, making it easier to trace issues and understand the context of the log.
+                                   A typical Log line might look like this:
+                                   `2023-10-01 12:00:00 INFO com.example.MyClass - This is a log message`
+                                   seeing "com.example.MyClass" tells you exactly where the log came from.
+
+Logging Configuration in a standard Java Application:
+     You configure logging in a standard java application by placing a configuration file in the "src/main/resources" directory. The logging framework will automatically
+     find and use this file when the application starts.
+     For Logback, the file is named "logback.xml" . Refer to logback.xml file in this project for an example.
+
+
+
